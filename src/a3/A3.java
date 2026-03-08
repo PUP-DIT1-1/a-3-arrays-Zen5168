@@ -26,7 +26,7 @@ public class A3 {
              {90,94,97}, // Del Coro
              {94,90,95}, // Dolotallas
              {91,90,92}, // Dreu
-             {88,90,92}, //Esteban
+             {88,90,92}, // Esteban
              {90,90,92}, // Macabales
              {90,90,92}, // Pacana
              {91,90,92}, // Padil
@@ -54,16 +54,39 @@ public class A3 {
              }
          }
          
-         
-         double[] avg = new double[names.length];
+        // AVERAGE COMPUTATION
+        double[] avg = new double[names.length];
         for (int i = 0; i < names.length; i++) {
             avg[i] = (grades[i][0] + grades[i][1] + grades[i][2]) / 3.0;
         }
          // DISPLAY NAMES AND GRADES
+                System.out.printf("%-30s | %-10s | %-15s | %n", "NAME", "GRADES", "AVERAGE");
+                System.out.println("--------------------------------------------------------------|");
          for (int i = 0; i < names.length; i++){
              
                  System.out.printf("%-30s | %.0f, %.0f, %.0f | average = %.2f | %n", 
                       names[i], grades[i][0], grades[i][1], grades[i][2], avg[i]);
        }
-    }
+         
+         // LINEAR SEARCH
+         System.out.print("\nEnter name to search: ");
+         String search = sc.nextLine();
+         boolean isFound = false;
+         
+         for(int k = 0; k < names.length; k++){
+             
+             if(names[k].equalsIgnoreCase(search)){
+                System.out.printf("%s is no.%d on the student list%n", search, (k + 1));
+                System.out.printf("Name:    %s%n", names[k]);
+                System.out.printf("Grades:  %.0f, %.0f, %.0f%n", grades[k][0], grades[k][1], grades[k][2]);
+                System.out.printf("Average: %.2f%n", avg[k]);
+                isFound = true;
+                break;
+             }
+         }
+         
+             if(!isFound){
+             System.out.println("Student " + search + " cannot be found on the student list.");
+         }
+     }
   }
