@@ -73,7 +73,13 @@ public class A3 {
          String search = sc.nextLine();
          boolean isFound = false;
          
-         for(int k = 0; k < names.length; k++){
+         
+         if (search.length() < 3){
+             System.out.println("Error: Please enter at least 3 characters to search.");
+         }
+         
+         else{
+             for(int k = 0; k < names.length; k++){
              
              if(names[k].toLowerCase().contains(search.toLowerCase())){
                 System.out.printf("%s is no.%d on the student list%n", search, (k + 1));
@@ -88,5 +94,6 @@ public class A3 {
              if(!isFound){
              System.out.println("Student " + search + " cannot be found on the student list.");
          }
+        }
      }
   }
