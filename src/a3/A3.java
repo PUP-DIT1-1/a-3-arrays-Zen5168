@@ -4,6 +4,9 @@ import java.util.*;
 public class A3 {
 
     public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        
+        // NAMES
          String[] names = {
             "Russel Arcega", 
             "Dwight Dejy Del Coro", 
@@ -17,6 +20,7 @@ public class A3 {
             "Kyle Zedrick Villamor"
         };
          
+         // GRADES
          double[][] grades = {
              {89,90,92}, // Arcega
              {90,94,97}, // Del Coro
@@ -30,9 +34,14 @@ public class A3 {
              {90,95,95}, // Villamor
          };
          
+         // DISPLAY NAMES AND GRADES
          for (int i = 0; i < names.length; i++){
-                 System.out.printf("%-30s | %.0f, %.0f, %.0f%n", 
-                      names[i], grades[i][0], grades[i][1], grades[i][2]);
+             double avg = (grades[i][0] + grades[i][1] + grades[i][2]) / grades[i].length;
+             
+                 System.out.printf("%-30s | %.0f, %.0f, %.0f | average = %.2f | %n", 
+                      names[i], grades[i][0], grades[i][1], grades[i][2], avg);
        }
+         
+         
     }
   }
