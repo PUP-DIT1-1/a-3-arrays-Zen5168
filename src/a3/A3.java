@@ -1,4 +1,5 @@
 package a3;
+import java.util.*;
 
 public class A3 {
 
@@ -28,5 +29,10 @@ public class A3 {
              {90,95,94}, // Talotalo
              {90,95,95}, // Villamor
          };
+         
+         for (int i = 0; i < names.length; i++){
+                 System.out.printf("%-30s | %.0f, %.0f, %.0f%n", 
+                      names[i], grades[i][0], grades[i][1], grades[i][2]);
+       }
     }
   }
