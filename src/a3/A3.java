@@ -15,5 +15,7 @@ public class A3 {
             "John Mark Ezekiel Talotalo",
             "Kyle Zedrick Villamor"
         };
+         
+         System.out.println("Testing");
     }
   }
