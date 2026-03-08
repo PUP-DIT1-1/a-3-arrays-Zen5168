@@ -75,7 +75,7 @@ public class A3 {
          
          for(int k = 0; k < names.length; k++){
              
-             if(names[k].equalsIgnoreCase(search)){
+             if(names[k].toLowerCase().contains(search.toLowerCase())){
                 System.out.printf("%s is no.%d on the student list%n", search, (k + 1));
                 System.out.printf("Name:    %s%n", names[k]);
                 System.out.printf("Grades:  %.0f, %.0f, %.0f%n", grades[k][0], grades[k][1], grades[k][2]);
