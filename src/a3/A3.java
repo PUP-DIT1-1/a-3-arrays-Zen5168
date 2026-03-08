@@ -34,14 +34,36 @@ public class A3 {
              {90,95,95}, // Villamor
          };
          
+         // BUBBLE SORT
+         int n = names.length;
+         for(int i = 0; i < n -1; i++){
+             for(int j = 0; j < n - i - 1; j++){
+                 
+                double avg1 = (grades[j][0] + grades[j][1] + grades[j][2]) / 3.0;
+                double avg2 = (grades[j+1][0] + grades[j+1][1] + grades[j+1][2]) / 3.0;
+                
+                if(avg1 > avg2){
+                    String tempName = names[j];
+                    names [j] = names[j + 1];
+                    names [j + 1] = tempName;
+                    
+                    double[] tempGradeRow = grades[j];
+                    grades[j] = grades[j + 1];
+                    grades[j + 1] = tempGradeRow;
+                }
+             }
+         }
+         
+         
+         double[] avg = new double[names.length];
+        for (int i = 0; i < names.length; i++) {
+            avg[i] = (grades[i][0] + grades[i][1] + grades[i][2]) / 3.0;
+        }
          // DISPLAY NAMES AND GRADES
          for (int i = 0; i < names.length; i++){
-             double avg = (grades[i][0] + grades[i][1] + grades[i][2]) / grades[i].length;
              
                  System.out.printf("%-30s | %.0f, %.0f, %.0f | average = %.2f | %n", 
-                      names[i], grades[i][0], grades[i][1], grades[i][2], avg);
+                      names[i], grades[i][0], grades[i][1], grades[i][2], avg[i]);
        }
-         
-         
     }
   }
