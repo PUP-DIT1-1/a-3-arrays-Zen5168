@@ -100,7 +100,7 @@ public class A3 {
             return; 
         }
 
-        boolean isFound = false;
+        boolean isFound = true;
         for (int k = 0; k < names.length; k++) {
             if (names[k].toLowerCase().contains(search)) {
                 double avg = (grades[k][0] + grades[k][1] + grades[k][2]) / 3.0;
@@ -113,7 +113,7 @@ public class A3 {
             }
         }
 
-        if (!isFound) {
+        if (isFound) {
             System.out.println("No matching student found.");
         }
     }
