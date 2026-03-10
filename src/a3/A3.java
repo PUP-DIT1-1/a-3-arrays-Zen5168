@@ -108,7 +108,6 @@ public class A3 {
                 System.out.printf("Name:    %s (List No. %d)%n", names[k], (k + 1));
                 System.out.printf("Grades:  %.0f, %.0f, %.0f%n", grades[k][0], grades[k][1], grades[k][2]);
                 System.out.printf("Average: %.2f%n", avg);
-                isFound = true;
                 break; 
             }
         }
