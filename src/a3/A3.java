@@ -62,7 +62,6 @@ public class A3 {
     }
 
     // INPUT VALIDATION
-    
     static double getDoubleInput(){
         while(true){
             try{
@@ -107,7 +106,8 @@ public class A3 {
                              names[i], grades[i][0], grades[i][1], grades[i][2], avg);
         }
     }
-
+    
+    // LINEAR SEARCH
     public static void Search(Scanner sc, String[] names, double[][] grades) {
         System.out.print("Enter name to search (min. 3 chars): ");
         String search = sc.nextLine().trim().toLowerCase();
