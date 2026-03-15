@@ -1,5 +1,6 @@
 package a3;
 import java.util.*;
+import java.io.*;
 
 public class A3{
     
@@ -7,8 +8,11 @@ public class A3{
     static ArrayList<String> students = new ArrayList<>();
     static Map<String, double[]> studentGrades = new HashMap<>();
     static int menuChoice;
+    static final String FILE_NAME = "student_data.txt";
     
     public static void main (String [] args) {
+        
+        loadData();
         do {
             System.out.println("""
                            Choose an option:
@@ -28,7 +32,7 @@ public class A3{
             case 3 ->  encodeGrades();
             case 4 ->  searchStudent();
             case 5 ->  displayAllStudents();
-            case 6 ->  System.out.println("Not Yet Added");
+            case 6 ->  saveAndExit();
             default ->  System.out.println(menuChoice + " is not an option");
         }
       }
@@ -339,4 +343,55 @@ public class A3{
     System.out.println("\n-----------------------------------------------------------");
     System.out.println("");
   }
+   
+   static void saveAndExit() {
+        File file = new File(FILE_NAME);
+
+        if (file.exists()) {
+            System.out.print("Data file already exists. Overwrite? (Y/N): ");
+            String confirm = sc.nextLine().trim();
+            if (!confirm.equalsIgnoreCase("y")) {
+                System.out.println("Save cancelled. Exiting program...");
+                return;
+            }
+        }
+
+        try (PrintWriter writer = new PrintWriter(new FileWriter(FILE_NAME))) {
+            for (String student : students) {
+                double[] grades = studentGrades.getOrDefault(student.toLowerCase(), new double[]{0, 0, 0});
+                writer.println(student + "|" + grades[0] + "," + grades[1] + "," + grades[2]);
+            }
+            System.out.println("Data saved successfully to " + FILE_NAME);
+        } catch (IOException e) {
+            System.out.println("Error saving file: " + e.getMessage());
+        }
+        System.out.println("Exiting...");
+    }
+   
+   // LOAD DATA
+   static void loadData() {
+        File file = new File(FILE_NAME);
+        if (!file.exists()) return;
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split("\\|");
+                if (parts.length == 2) {
+                    String name = parts[0];
+                    students.add(name);
+                    
+                    String[] gradeStrings = parts[1].split(",");
+                    double[] grades = new double[3];
+                    for (int i = 0; i < 3; i++) {
+                        grades[i] = Double.parseDouble(gradeStrings[i]);
+                    }
+                    studentGrades.put(name.toLowerCase(), grades);
+                }
+            }
+            System.out.println("Previous data loaded successfully.");
+        } catch (IOException | NumberFormatException e) {
+            System.out.println("No existing data found or error loading file.");
+        }
+    }
 }
