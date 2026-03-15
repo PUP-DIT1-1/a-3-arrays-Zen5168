@@ -365,7 +365,7 @@ public class A3{
         } catch (IOException e) {
             System.out.println("Error saving file: " + e.getMessage());
         }
-        System.out.println("Exiting...");
+        System.out.println("Sayonara~");
     }
    
    // LOAD DATA
