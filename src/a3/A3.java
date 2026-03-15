@@ -165,7 +165,7 @@ public class A3{
         }
 
         if (nameToRemove.equalsIgnoreCase("exit")) {
-            System.out.println("Now exiting...");
+            System.out.println("Sayonara~");
             System.out.println("----------------------------");
             System.out.println("");
             break; 
