@@ -350,8 +350,9 @@ public class A3{
         if (file.exists()) {
             System.out.print("Data file already exists. Overwrite? (Y/N): ");
             String confirm = sc.nextLine().trim();
+            
             if (!confirm.equalsIgnoreCase("y")) {
-                System.out.println("Save cancelled. Exiting program...");
+                System.out.println("Save cancelled. Sayonara~");
                 return;
             }
         }
@@ -361,10 +362,14 @@ public class A3{
                 double[] grades = studentGrades.getOrDefault(student.toLowerCase(), new double[]{0, 0, 0});
                 writer.println(student + "|" + grades[0] + "," + grades[1] + "," + grades[2]);
             }
+            
             System.out.println("Data saved successfully to " + FILE_NAME);
-        } catch (IOException e) {
+        } 
+        
+        catch (IOException e) {
             System.out.println("Error saving file: " + e.getMessage());
         }
+        
         System.out.println("Sayonara~");
     }
    
@@ -375,8 +380,10 @@ public class A3{
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
+            
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split("\\|");
+                
                 if (parts.length == 2) {
                     String name = parts[0];
                     students.add(name);
@@ -386,12 +393,16 @@ public class A3{
                     for (int i = 0; i < 3; i++) {
                         grades[i] = Double.parseDouble(gradeStrings[i]);
                     }
+                    
                     studentGrades.put(name.toLowerCase(), grades);
                 }
             }
+            
             System.out.println("Previous data loaded successfully.");
-        } catch (IOException | NumberFormatException e) {
-            System.out.println("No existing data found or error loading file.");
+        } 
+        
+        catch (IOException | NumberFormatException e) {
+            System.out.println("No existing data found.");
         }
     }
 }
