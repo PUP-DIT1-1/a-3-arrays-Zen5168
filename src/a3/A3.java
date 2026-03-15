@@ -1,135 +1,342 @@
 package a3;
 import java.util.*;
 
-public class A3 {
+public class A3{
     
     static Scanner sc = new Scanner(System.in);
-
-    public static void main(String[] args) {
-        int numStudents = 10;
-        String[] names = new String[numStudents];
-        double[][] grades = new double[numStudents][3];
-        String[] subjects = {"Mathematics", "English", "Science"};
-
-        System.out.println("--- Enter Details for " + numStudents + " Students ---");
-        System.out.println("----------------------------------------");
-        System.out.println("     The grading system is 0 - 100   "); 
-        System.out.println("----------------------------------------\n");
+    static ArrayList<String> students = new ArrayList<>();
+    static Map<String, double[]> studentGrades = new HashMap<>();
+    static int menuChoice;
+    
+    public static void main (String [] args) {
+        do {
+            System.out.println("""
+                           Choose an option:
+                           1.) Add Student
+                           2.) Remove Student
+                           3.) Encode Grades
+                           4.) Search Student
+                           5.) Display All Students Data
+                           6.) Save & Exit
+                           """);
+        System.out.print("Enter your choice (1-6): ");
+        menuChoice = getIntInput();
         
-        for (int i = 0; i < numStudents; i++) {
-            System.out.print("Enter name for student " + (i + 1) + ": ");
-            names[i] = sc.nextLine();
-      
-            for (int j = 0; j < 3; j++) {
-                grades[i][j] = getValidatedGrade(subjects[j], names[i]);
-            }
-            System.out.println();
+        switch(menuChoice) {
+            case 1 ->  addStudents();
+            case 2 ->  removeStudents();
+            case 3 ->  encodeGrades();
+            case 4 ->  searchStudent();
+            case 5 ->  displayAllStudents();
+            case 6 ->  System.out.println("Not Yet Added");
+            default ->  System.out.println(menuChoice + " is not an option");
+        }
+      }
+        while(menuChoice !=6);
+    }
+    
+    // MENU INPUT VALIDATION
+    public static int getIntInput() {
+    while (true) {
+        String input = sc.nextLine().trim(); 
+        
+        if (input.isEmpty()) {
+            System.out.println("-------------------------------------------------------");
+            System.out.println("Input cannot be empty! Please enter a number.");
+            System.out.print("> ");
+            continue; 
         }
 
-        bubbleSort(names, grades);
-        displayAllStudents(names, grades);
-
-        String choice;
-        do {
-            System.out.print("\nDo you want to search for a student? (yes/no): ");
-            choice = sc.nextLine().trim().toLowerCase();
-
-            if (choice.equals("yes")) {
-                Search(sc, names, grades);
-            } else if (!choice.equals("no")) {
-                System.out.println("Invalid input. Please type 'yes' or 'no'.");
-            }          
-        } while (!choice.equals("no"));
+        try{
+            return Integer.parseInt(input);
+        } 
         
-        System.out.println("Bye-bye!");
-    }
-
-    // METHOD FOR GRADE VALIDATION
-    public static double getValidatedGrade(String subject, String studentName) {
-        double grade;
-        do {
-            System.out.print("Enter grade in " + subject + " for " + studentName + ": ");
-            grade = getDoubleInput();
-
-            if (grade > 100) {
-                System.out.println("Grade can't be greater than 100. Try again.");
-            } else if (grade < 0) {
-                System.out.println("Grade can't be less than 0. Try again.");
-            }
-        } while (grade < 0 || grade > 100);
-        
-        return grade;
-    }
-
-    // INPUT VALIDATION
-    static double getDoubleInput(){
-        while(true){
-            try{
-                double input = sc.nextDouble();
-                sc.nextLine(); 
-                return input;
-            } catch (InputMismatchException e) {
-                String badInput = sc.nextLine();
-                System.out.println("-------------------------------------------------------");
-                System.out.println(badInput + " is not a number!");
-                System.out.println("Please Try Again!");
-                System.out.print("> "); 
-            }   
+        catch (NumberFormatException e) {
+            System.out.println("-------------------------------------------------------");
+            System.out.println("'" + input + "' is not a valid number!");
+            System.out.println("Please Try Again!");
+            System.out.print("> ");
         }
     }
+}
+   // ADD STUDENTS
+   static void addStudents() {
+    if (students.size() >= 10) {
+        System.out.println("");
+        System.out.println("Maximum students reached (10/10)!");
+        return;
+    }
+   
+     Collections.sort(students);
+        
+        System.out.println("--- Current Student List ---");
+        for (int i = 0; i < students.size(); i++) {
+            String prefix = (i + 1) + ".)";
+            System.out.printf("%-3s %s%n", prefix, students.get(i));
+        }
+        
+    System.out.println("");
+    System.out.println("--- Enrolling Students ---");
+    System.out.println("");
+    for (int i = students.size(); i < 10; i++) {
+        System.out.print("Enter name for Student #" + (i + 1) + " or type \"exit\": ");
+        String name = sc.nextLine().trim();
 
-    // BUBBLE SORT
-    public static void bubbleSort(String[] names, double[][] grades) {
-        int n = names.length;
-        for(int i = 0; i < n - 1; i++) {
-            for(int j = 0; j < n - i - 1; j++) {
-                double avg1 = (grades[j][0] + grades[j][1] + grades[j][2]) / 3.0;
-                double avg2 = (grades[j+1][0] + grades[j+1][1] + grades[j+1][2]) / 3.0;
-                if(avg1 > avg2) {
-                    String tempName = names[j]; 
-                    names[j] = names[j + 1]; 
-                    names[j + 1] = tempName;
-                    double[] tempGradeRow = grades[j]; 
-                    grades[j] = grades[j + 1]; 
-                    grades[j + 1] = tempGradeRow;
+        while (true) {
+            
+            if (name.isEmpty()) {
+                System.out.println("Name cannot be empty!");
+            }
+            
+             if (name.equalsIgnoreCase("exit")) {
+                 System.out.println("");
+                return;
+            }
+            
+            else {
+                boolean exists = false;
+                for (String s : students) {
+                    if (s.equalsIgnoreCase(name)) {
+                        exists = true;
+                        break;
+                    }
+                }
+   
+                if (exists) {
+                    System.out.println("Error: " + name + " is already enrolled!");
+                } 
+                
+                else {
+                    break;
+                }
+            }
+            
+            System.out.print("Enter name for Student #" + (i + 1) + ": ");
+            name = sc.nextLine().trim();
+        }
+
+        students.add(name);
+        System.out.println(">> " + name + " has been enrolled!");
+    }
+    
+       System.out.println("");
+       System.out.println("-------------------------------------------------------");
+       System.out.println("Registration complete. All 10 slots are full.");
+       System.out.println("-------------------------------------------------------");
+       System.out.println("");
+}
+    
+   // REMOVE STUDENTS
+   static void removeStudents() {
+    while (true) {
+
+        if (students.isEmpty()) {
+            System.out.println("");
+            System.out.println("-------------------------------------------------------");
+            System.out.println("The list is now empty! Returning to main menu...");
+            System.out.println("-------------------------------------------------------");
+            System.out.println("");
+            return; 
+        }
+        
+        Collections.sort(students);
+        
+        System.out.println("--- Current Student List ---");
+        
+        for (int i = 0; i < students.size(); i++) {
+            String prefix = (i + 1) + ".)";
+            System.out.printf("%-3s %s%n", prefix, students.get(i));
+        }
+        
+        System.out.println("");
+        System.out.println("--- Remove a Student ---");
+        System.out.println("(Type 'exit' to go back to main menu)");
+        System.out.print("Enter name to remove or type \"exit\": ");
+        
+        String nameToRemove = sc.nextLine().trim();
+
+        if (nameToRemove.isEmpty()) {
+            System.out.println(">> Error: Input cannot be empty! Please try again.");
+            continue; 
+        }
+
+        if (nameToRemove.equalsIgnoreCase("exit")) {
+            System.out.println("Now exiting...");
+            System.out.println("----------------------------");
+            System.out.println("");
+            break; 
+        }
+
+        boolean found = false;
+        for (int i = 0; i < students.size(); i++) {
+        if (students.get(i).equalsIgnoreCase(nameToRemove)) {
+        String removedName = students.remove(i);
+        
+        studentGrades.remove(removedName.toLowerCase());
+        
+        System.out.println(">> " + removedName + " has been removed from the class and their grades were cleared!");
+        found = true;
+        break;
+        }
+     }
+
+        if (!found) {
+            System.out.println(">> Error: student named '" + nameToRemove + "' cannot found.");
+         }
+      }
+   }
+   
+   // ENCODE GRADES
+   static void encodeGrades() {
+      if (students.isEmpty()) {
+        
+        System.out.println("");
+        System.out.println("-------------------------------------------------------------");
+        System.out.println("No students enrolled. Please add a student first.");
+        System.out.println("-------------------------------------------------------------");
+        System.out.println("");
+        return;
+    }
+
+     double[][] allGrades = new double[10][3];
+
+     for (int i = 0; i < students.size(); i++) {
+        
+        System.out.println("Encoding grades for: " + students.get(i));
+        for (int j = 0; j < 3; j++) {
+            while (true) {
+                System.out.print("Enter Grade " + (j + 1) + ": ");
+                
+                try {
+                    
+                    double grade = Double.parseDouble(sc.nextLine());
+                    if (grade < 0 || grade > 100) {
+                        System.out.println("Invalid grade! Please enter 0-100.");
+                        continue;
+                    }
+                    
+                    allGrades[i][j] = grade;
+                    break;
+                } 
+                
+                catch (NumberFormatException e) {
+                    System.out.println("Invalid input! Please enter a numeric grade.");
                 }
             }
         }
+        
+        studentGrades.put(students.get(i).toLowerCase(), allGrades[i]);
+        System.out.println("Grades saved for " + students.get(i) + ".\n");
+    }
+}
+  
+   // LINEAR SEARCH
+   static void searchStudent() {
+    if (students.isEmpty()) {
+        System.out.println("");
+        System.out.println("--------------------------------");
+        System.out.println("No students enrolled yet.");
+        System.out.println("--------------------------------");
+        System.out.println("");
+        return;
     }
 
-    public static void displayAllStudents(String[] names, double[][] grades) {
-        System.out.printf("\n%-35s | %-10s | %-15s | %n", "NAME", "GRADES", "AVERAGE");
-        System.out.println("--------------------------------------------------------------|");
-        for (int i = 0; i < names.length; i++) {
-            double avg = (grades[i][0] + grades[i][1] + grades[i][2]) / 3.0;
-            System.out.printf("%-35s | %.0f, %.0f, %.0f | average = %.2f | %n", 
-                             names[i], grades[i][0], grades[i][1], grades[i][2], avg);
-        }
-    }
-    
-    // LINEAR SEARCH
-    public static void Search(Scanner sc, String[] names, double[][] grades) {
-        System.out.print("Enter name to search (min. 3 chars): ");
-        String search = sc.nextLine().trim().toLowerCase();
-        if (search.length() < 3) { System.out.println("Too short! Please try again."); return; }
+    System.out.print("Enter student name to search: ");
+    String target = sc.nextLine().trim();
 
-        boolean isFound = false;
-        for (int k = 0; k < names.length; k++) {
-            
-            if (names[k].toLowerCase().contains(search)) {
-                double avg = (grades[k][0] + grades[k][1] + grades[k][2]) / 3.0;
-                System.out.printf("\nStudent Found!%n" );
-                System.out.printf("Name:    %s (List No. %d)%n", names[k], (k + 1));
-                System.out.printf("Grades:  %.0f, %.0f, %.0f%n", grades[k][0], grades[k][1], grades[k][2]);
-                System.out.printf("Average: %.2f%n", avg);
-                System.out.printf("Rank: %d %n", (names.length - k));
-                isFound = true;
-                break; 
+    int n = students.size();
+    String[] names = students.toArray(new String[0]);
+    double[] averages = new double[n];
+
+    for (int i = 0; i < n; i++) {
+        double[] grades = studentGrades.getOrDefault(names[i].toLowerCase(), new double[]{0, 0, 0});
+        double sum = 0;
+        for (double g : grades) sum += g;
+        averages[i] = sum / 3.0;
+    }
+
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - i - 1; j++) {
+            if (averages[j] < averages[j + 1]) {
+                double tempAvg = averages[j];
+                averages[j] = averages[j + 1];
+                averages[j + 1] = tempAvg;
+
+                String tempName = names[j];
+                names[j] = names[j + 1];
+                names[j + 1] = tempName;
             }
         }
+    }
 
-        if (!isFound) {
-            System.out.println("No matching student found.");
+    boolean found = false;
+    System.out.println("\n--- Search Result ---");
+    for (int i = 0; i < n; i++) {
+        if (names[i].equalsIgnoreCase(target)) {
+            System.out.println("Name:    " + names[i]);
+            System.out.printf("Average: %.2f%n", averages[i]);
+            System.out.println("Rank:    #" + (i + 1)); 
+            found = true;
+            break;
         }
     }
+
+    if (!found) {
+        System.out.println("Student '" + target + "' not found.");
+    }
+    System.out.println("----------------------\n");
+}
+   
+   // DISPLAY ALL STUDENT DATA
+   static void displayAllStudents() {
+    if (students.isEmpty()) {
+        System.out.println("");
+        System.out.println("-----------------------------");
+        System.out.println("No students to display.");
+        System.out.println("-----------------------------");
+        System.out.println("");
+        return;
+    }
+
+    int n = students.size();
+    String[] names = students.toArray(new String[0]);
+    double[] averages = new double[n];
+
+    for (int i = 0; i < n; i++) {
+        double[] grades = studentGrades.getOrDefault(names[i].toLowerCase(), new double[]{0, 0, 0});
+        double sum = 0;
+        for (double g : grades) sum += g;
+        averages[i] = sum / 3.0;
+    }
+
+    // Bubble Sort
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - i - 1; j++) {
+            if (averages[j] > averages[j + 1]) {
+                
+                // SORT AVERAGE
+                double tempAvg = averages[j];
+                averages[j] = averages[j + 1];
+                averages[j + 1] = tempAvg;
+
+                // SORT NAMES TO SYNC THE AVERAGE
+                String tempName = names[j];
+                names[j] = names[j + 1];
+                names[j + 1] = tempName;
+            }
+        }
+    }
+     
+    // DISPLAY 
+    System.out.println("");
+    System.out.println("\n--- Students (Sorted by Average Ascending) ---");
+    System.out.println("\n-----------------------------------------------------------");
+    System.out.printf("\n%-35s | %-15s %n", "NAME", "AVERAGE");
+    for (int i = 0; i < n; i++) {
+        System.out.printf("%-35s | %.2f%n", names[i], averages[i]);
+    }
+    
+    System.out.println("\n-----------------------------------------------------------");
+    System.out.println("");
+  }
 }
